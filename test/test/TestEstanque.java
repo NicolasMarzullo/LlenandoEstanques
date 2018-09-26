@@ -21,6 +21,8 @@ public class TestEstanque {
 			System.out.println(estanques.get(i));
 		}
 		
+		System.out.println("-----------SALIDA--------------");
+		conjEstanques.resolver();
 	}
 
 }

@@ -16,6 +16,22 @@ public class ConjuntoEstanque {
 	public ArrayList<Estanque> getEstanques() {
 		return estanques;
 	}
+	
+	public void resolver() {
+		//primero calculo todo lo que puede almancenar el sistema de estanques.
+		int volumenTotalSistema = 0 ;
+		Estanque estanque;
+		
+		for(int i = 0; i<this.cantidadDeEstanques; i++) {
+			estanque = this.estanques.get(i);
+			volumenTotalSistema += estanque.superficie * estanque.profundidad;
+		}
+		
+		if(volumenTotalSistema < this.volumenDeAgua)
+			System.out.println("Hay desborde: " + (this.volumenDeAgua - volumenTotalSistema));
+	}
+	
+	
 
 	
 	
