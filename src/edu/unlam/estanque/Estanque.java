@@ -5,12 +5,14 @@ public class Estanque {
 	int superficie;
 	int profundidad;
 	int profunidadadCaño;
+	int volumenDisponible;
 	
 	public Estanque(int nroTanque, int superficie, int profundidad, int profunidadadCaño) {
 		this.nroTanque = nroTanque;
 		this.superficie = superficie;
 		this.profundidad = profundidad;
 		this.profunidadadCaño = profunidadadCaño;
+		this.volumenDisponible = superficie*profundidad;
 	}
 
 	@Override

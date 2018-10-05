@@ -16,7 +16,8 @@ public class ArchivoEstanque {
 		for(int i=0; i<cantEstanques-1;i++) 
 			estanques.add(new Estanque(i+1,lector.nextInt(), lector.nextInt(), lector.nextInt()));
 		
-		estanques.add(new Estanque(cantEstanques, lector.nextInt(), lector.nextInt(), 0));	//ultimo estanque
+		//ultimo estanque sin caño dererecho
+		estanques.add(new Estanque(cantEstanques, lector.nextInt(), lector.nextInt(), 0));
 		volumenDeAgua = lector.nextInt();
 		lector.close();
 		
