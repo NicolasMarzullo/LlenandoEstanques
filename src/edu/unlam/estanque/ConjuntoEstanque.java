@@ -6,7 +6,7 @@ public class ConjuntoEstanque {
 	private ArrayList<Estanque> estanques;
 	private int cantidadDeEstanques;
 	private int volumenDeAgua;
-	
+
 	public ConjuntoEstanque(ArrayList<Estanque> estanques, int cantidadDeEstanques, int volumenDeAgua) {
 		this.estanques = estanques;
 		this.cantidadDeEstanques = cantidadDeEstanques;
@@ -16,28 +16,49 @@ public class ConjuntoEstanque {
 	public ArrayList<Estanque> getEstanques() {
 		return estanques;
 	}
+
 	
 	public void resolver() {
-		//primero calculo todo lo que puede almancenar el sistema de estanques.
-		int volumenTotalSistema = 0 ;
-		Estanque estanque;
+		int i=0, cantEstanquesUsados=0, profundidadAguaMedidaDesdeArriba=0;
+		int aguaRestante = this.volumenDeAgua;
+		Estanque estanqueAux = null;
+		Estanque estanqueActual;
 		
-		for(int i = 0; i<this.cantidadDeEstanques; i++) {
-			estanque = this.estanques.get(i);
-			volumenTotalSistema += estanque.superficie * estanque.profundidad;
+		while(estanqueAux.profundidadCañoDer>profundidadAguaMedidaDesdeArriba) {//veo si conectarle mas tanques cambiaria la situacion del agua o quedaría igual
+			
+			while(aguaRestante != 0) {
+				estanqueAux = this.estanques.get(i);
+				
+				aguaRestante = estanqueAux.vertirAgua(aguaRestante);
+			
+				if(aguaRestante!=0) 
+					aguaRestante += estanqueAux.sacarSobrante();
+				i++;
+				cantEstanquesUsados++;
+			}
+		
+		profundidadAguaMedidaDesdeArriba = estanqueAux.profundidad - estanqueAux.alturaAguaCargada;
+		
 		}
 		
-		if(volumenTotalSistema < this.volumenDeAgua)
-			System.out.println("Hay desborde: " + (this.volumenDeAgua - volumenTotalSistema));
+		//ahora los nivelo (hacia la izquierda), solo si corresponde
+		int j = estanqueAux.nroTanque-1;
+		estanqueActual = this.estanques.get(j);
+		
+	
+		
+		if(profundidadAguaMedidaDesdeArriba < estanqueAux.profundidadCañoIzq) {//hay que nivelar
+			
+			//calculo el h de equilibrio (heq) = (S1*h1+S2*h2....+Sn*Hn)/(S1+S2+...+Sn)
+			while(j>=0 && (estanqueActual.profundidadCañoIzq == 0 || estanqueActual.profundidadCañoIzq < profundidadAguaMedidaDesdeArriba)) {
+				
+			}
+		}
+		
+		
+		
+		
 	}
 	
 	
-
-	
-	
-	
-	
-	
-	
-
 }
