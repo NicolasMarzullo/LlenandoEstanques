@@ -11,6 +11,7 @@ public class Estanque {
 	int volumenCargado;
 	int alturaAguaCargada;
 	int volumenTotal;
+	int profundidadDisponible;
 
 	public Estanque(int nroTanque, int superficie, int profundidad, int profundidadCañoIzq, int profundidadCañoDer) {
 		this.nroTanque = nroTanque;
@@ -21,6 +22,7 @@ public class Estanque {
 		this.volumenTotal = superficie * profundidad;
 		this.volumenCargado = 0;
 		this.alturaAguaCargada = 0;
+		this.profundidadDisponible = profundidad;
 	}
 
 	@Override
@@ -104,9 +106,11 @@ public class Estanque {
 		if(aguaRestante>= this.volumenTotal) {
 			this.volumenCargado += this.volumenTotal;
 			this.alturaAguaCargada += profundidad;
+			this.profundidadDisponible = 0;
 		}else {
 			this.volumenCargado += aguaRestante;
 			this.alturaAguaCargada = this.volumenCargado/this.superficie;
+			this.profundidadDisponible = this.profundidad- this.alturaAguaCargada;
 		}
 		aguaRestante -= this.volumenCargado;
 		
@@ -115,9 +119,18 @@ public class Estanque {
 	}
 
 	public int sacarSobrante() {
+		int retorno = this.volumenCargado - (this.volumenTotal-this.superficie*this.profundidadCañoDer);
 		this.volumenCargado = this.volumenTotal - this.profundidadCañoDer * this.superficie;
 		this.alturaAguaCargada = this.profundidad - this.profundidadCañoDer;
+		this.profundidadDisponible = this.profundidadCañoDer;
 		
-		return this.superficie*this.profundidadCañoDer;
+		//debo retornar el volumen cargado menos lo que está debajo del caño derecho
+		return retorno;
+	}
+	
+	public void sumarAguaConAltura(double metrosAgua) {
+		this.volumenCargado+= this.superficie*metrosAgua;
+		this.alturaAguaCargada += metrosAgua;
+		this.profundidadDisponible = this.volumenTotal- this.volumenCargado;
 	}
 }

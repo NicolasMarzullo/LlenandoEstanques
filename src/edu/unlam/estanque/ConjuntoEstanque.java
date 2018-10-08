@@ -19,41 +19,71 @@ public class ConjuntoEstanque {
 
 	
 	public void resolver() {
-		int i=0, cantEstanquesUsados=0, profundidadAguaMedidaDesdeArriba=0;
+		
+		int i=0,j=0, cantEstanquesUsados=0, profundidadAguaMedidaDesdeArriba=0;
 		int aguaRestante = this.volumenDeAgua;
+		int superficiesDeTanquesParaNivelar = 0, volumenANivelar=0;
+		int volumenTotalSistema=0;
+		double heq;
 		Estanque estanqueAux = null;
 		Estanque estanqueActual;
-		
-		while(estanqueAux.profundidadCañoDer>profundidadAguaMedidaDesdeArriba) {//veo si conectarle mas tanques cambiaria la situacion del agua o quedaría igual
+
+		for (i = 0; i < this.cantidadDeEstanques; i++) {
+			estanqueAux = this.estanques.get(i);
+			volumenTotalSistema += estanqueAux.superficie * estanqueAux.profundidad;
+		}
+
+		if (volumenTotalSistema < this.volumenDeAgua) {
+
+			System.out.println("Hay desborde: " + (this.volumenDeAgua - volumenTotalSistema));
+			return;
+		}
 			
-			while(aguaRestante != 0) {
-				estanqueAux = this.estanques.get(i);
-				
-				aguaRestante = estanqueAux.vertirAgua(aguaRestante);
+		i=0;
+		while (aguaRestante != 0) {
+			estanqueAux = this.estanques.get(i);
 			
-				if(aguaRestante!=0) 
+			aguaRestante = estanqueAux.vertirAgua(aguaRestante);
+			
+			//quedó por arriba del caño derecho?
+			if(estanqueAux.profundidadDisponible<estanqueAux.profundidadCañoDer) {
+				if(i==0)	//es el primer tanque?
 					aguaRestante += estanqueAux.sacarSobrante();
-				i++;
-				cantEstanquesUsados++;
+				//no es el primer tanque
+				else{
+					//hay que nivelar
+					if(estanqueAux.profundidadCañoIzq > estanqueAux.profundidadDisponible) {
+						
+						j=i;
+						estanqueActual = estanqueAux;
+						volumenANivelar = estanqueActual.volumenCargado - (estanqueActual.volumenTotal - estanqueActual.profundidadCañoIzq * estanqueActual.superficie);
+						
+						while(estanqueActual.profundidadCañoDer<estanqueActual.profundidadCañoIzq) {
+							
+							superficiesDeTanquesParaNivelar += estanqueActual.superficie;
+							
+							j--;
+							estanqueActual = this.estanques.get(j);
+						}
+						
+						//sumo la ultima 
+						superficiesDeTanquesParaNivelar += estanqueActual.superficie;
+						
+						//este es el h que tiene que subir cada tanque, multiplicar por cada area 
+						heq = volumenANivelar/superficiesDeTanquesParaNivelar;
+						
+						for(;j<=i;j++) 
+							this.estanques.get(j).sumarAguaConAltura(heq);
+					}
+					
+				}
 			}
-		
-		profundidadAguaMedidaDesdeArriba = estanqueAux.profundidad - estanqueAux.alturaAguaCargada;
-		
-		}
-		
-		//ahora los nivelo (hacia la izquierda), solo si corresponde
-		int j = estanqueAux.nroTanque-1;
-		estanqueActual = this.estanques.get(j);
-		
-	
-		
-		if(profundidadAguaMedidaDesdeArriba < estanqueAux.profundidadCañoIzq) {//hay que nivelar
 			
-			//calculo el h de equilibrio (heq) = (S1*h1+S2*h2....+Sn*Hn)/(S1+S2+...+Sn)
-			while(j>=0 && (estanqueActual.profundidadCañoIzq == 0 || estanqueActual.profundidadCañoIzq < profundidadAguaMedidaDesdeArriba)) {
-				
-			}
+			i++;
+			cantEstanquesUsados++;
 		}
+		
+		
 		
 		
 		

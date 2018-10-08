@@ -13,7 +13,7 @@ public class TestEstanque {
 	
 	@Test
 	public void pruebaCargaEstanques() throws FileNotFoundException {
-		ConjuntoEstanque conjEstanques = ArchivoEstanque.leer("test/lotes/in/01_CasoEnunciado.in");
+		ConjuntoEstanque conjEstanques = ArchivoEstanque.leer("test/lotes/in/02_CasoEnunciado.in");
 		
 		ArrayList<Estanque> estanques = conjEstanques.getEstanques();
 		
