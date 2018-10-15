@@ -117,6 +117,19 @@ public class TestEstanque {
 		ArchivoEstanque.escribir("test/lotes/out/08_CasoMasDeUnaVuelta.out", conjEstanques.resolver());
 	}
 
+	
+	@Test
+	public void testCasoEscaleraEnBajada() throws FileNotFoundException {
+		ConjuntoEstanque conjEstanques = ArchivoEstanque.leer("test/lotes/in/09_CasoEscaleraEnBajada.in");
+		
+		ArrayList<Estanque> estanques = conjEstanques.getEstanques();
+		
+		for(int i=0; i<estanques.size();i++) {
+			System.out.println(estanques.get(i));
+		}
+		
+		ArchivoEstanque.escribir("test/lotes/out/09_CasoEscaleraEnBajada.out", conjEstanques.resolver());
+	}
 
 
 

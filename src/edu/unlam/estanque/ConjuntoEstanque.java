@@ -23,6 +23,7 @@ public class ConjuntoEstanque {
 		double volumenEntranteTotalEnCargaSimultanea, heq;
 		Estanque estanqueAux, estanqueActual;
 
+		//Me fijo primero si el agua entra en mi configuracion de tanques
 		for (i = 0; i < this.cantidadDeEstanques; i++) {
 			estanqueAux = this.estanques.get(i);
 			volumenTotalSistema += estanqueAux.superficie * estanqueAux.profundidad;
@@ -71,17 +72,20 @@ public class ConjuntoEstanque {
 					estanqueActual = this.estanques.get(j);
 				}
 				
+				// TODO: este if y la linea de abajo son redundantes pero sino no me procesa el ultimo estanque
 				if(estanqueActual.profundidadCañoIzq<minProfundidad) {
 					minProfundidadAnterior = minProfundidad;
 					minProfundidad = estanqueActual.profundidadCañoIzq;
 				}
 				
-				alturaMax = minProfundidadAnterior-minProfundidad;
+				superficiesDeTanquesALlenar += estanqueActual.superficie; /// El ultimo tanque a llenar
+				
+				alturaMax = minProfundidadAnterior-minProfundidad;	
 				
 				if(estanqueAux.profundidadCañoDer!=0) //si no es el ultimo estanque
 					alturaMax = estanqueAux.profundidadCañoIzq - estanqueAux.profundidadCañoDer;
 
-				superficiesDeTanquesALlenar += estanqueActual.superficie; /// El ultimo tanque a llenar
+				
 				
 				
 
