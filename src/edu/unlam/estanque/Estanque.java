@@ -9,7 +9,6 @@ public class Estanque {
 	double volumenCargado;
 	double alturaAguaCargada;
 	int volumenTotal;
-	double profundidadDisponible;
 
 	public Estanque(int nroTanque, int superficie, int profundidad, int profundidadCañoIzq, int profundidadCañoDer) {
 		this.nroTanque = nroTanque;
@@ -20,7 +19,6 @@ public class Estanque {
 		this.volumenTotal = superficie * profundidad;
 		this.volumenCargado = 0;
 		this.alturaAguaCargada = 0;
-		this.profundidadDisponible = profundidad;
 	}
 
 	@Override
@@ -30,42 +28,45 @@ public class Estanque {
 	}
 	
 
-	public int vertirAgua(int aguaRestante) {
+	public double vertirAgua(double aguaRestante) {
 		
-		if(aguaRestante>= this.volumenTotal) {
-			this.volumenCargado += this.volumenTotal;
-			this.alturaAguaCargada += profundidad;
-			this.profundidadDisponible = 0;
+		if(this.volumenCargado>0)
+			return aguaRestante;
+		
+		int cantidadDeAguaDebajoDelCañoDerecho = this.volumenTotal -(this.profundidadCañoDer*this.superficie);
+		int cantidadDeAguaDebajoDelCañoIzquierdo = this.volumenTotal -(this.profundidadCañoIzq*this.superficie);
+		
+		if(this.profundidadCañoDer>=this.profundidadCañoIzq) {
+			if(aguaRestante>= cantidadDeAguaDebajoDelCañoDerecho) {
+				aguaRestante-= cantidadDeAguaDebajoDelCañoDerecho;
+				this.volumenCargado += cantidadDeAguaDebajoDelCañoDerecho;
+				this.alturaAguaCargada += this.volumenCargado/this.superficie;
+			}else {
+				aguaRestante = 0;
+				this.volumenCargado += aguaRestante;
+				this.alturaAguaCargada += this.volumenCargado /this.superficie;
+			}
 		}else {
-			this.volumenCargado += aguaRestante;
-			this.alturaAguaCargada = this.volumenCargado/this.superficie;
-			this.profundidadDisponible = this.profundidad- this.alturaAguaCargada;
+			if(aguaRestante>= cantidadDeAguaDebajoDelCañoIzquierdo) {
+				aguaRestante-= cantidadDeAguaDebajoDelCañoIzquierdo;
+				this.volumenCargado += cantidadDeAguaDebajoDelCañoIzquierdo;
+				this.alturaAguaCargada += this.volumenCargado/this.superficie;
+			}else {
+				this.volumenCargado += aguaRestante;
+				this.alturaAguaCargada += this.volumenCargado /this.superficie;
+				aguaRestante = 0;
+			}
 		}
-		aguaRestante -= this.volumenCargado;
 		
 		return aguaRestante;
 		
 	}
-
-	public double sacarSobrante() {
-		double retorno = 0;
+	
+	public void sumarAguaConAltura(double metrosAgua) {
 		
-		if(this.profundidadDisponible<this.profundidadCañoDer) {
-			retorno = this.volumenCargado - (this.volumenTotal-this.superficie*this.profundidadCañoDer);
-			this.volumenCargado = this.volumenTotal - this.profundidadCañoDer * this.superficie;
-			this.alturaAguaCargada = this.profundidad - this.profundidadCañoDer;
-			this.profundidadDisponible = this.profundidadCañoDer;
-			
-		}
-	
-		return retorno;
-	}
-	
-	public void sumarAguaConAltura(double metrosAgua, int desde) {
-		this.volumenCargado = this.volumenTotal - (this.superficie * desde);
-		this.volumenCargado+= this.superficie* metrosAgua;
-			
-		this.alturaAguaCargada = this.volumenCargado/this.superficie;
-		this.profundidadDisponible = (this.volumenTotal- this.volumenCargado)/this.superficie;
+		this.alturaAguaCargada += metrosAgua;
+		this.volumenCargado += metrosAgua*this.superficie;
+		
+		
 	}
 }
